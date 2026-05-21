@@ -125,3 +125,4 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/login/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+CSRF_TRUSTED_ORIGINS = ['https://web-production-b636b.up.railway.app']
