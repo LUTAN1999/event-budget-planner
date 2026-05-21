@@ -1,0 +1,18 @@
+{% extends 'planner/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card p-4 text-center">
+            <h4 class="text-danger mb-3">Delete Event?</h4>
+            <p>Are you sure you want to delete <strong>{{ event.name }}</strong>?</p>
+            <p class="text-muted small">This will delete all categories, expenses and vendors inside it.</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger w-100">Yes, Delete</button>
+            </form>
+            <a href="{% url 'event_list' %}" class="btn btn-outline-secondary w-100 mt-2">Cancel</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

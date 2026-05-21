@@ -1,0 +1,38 @@
+{% extends 'planner/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h3 class="mb-4">{% if event %}Edit Event{% else %}Create New Event{% endif %}</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Event Name</label>
+                    <input type="text" name="name" class="form-control"
+                           value="{{ event.name }}" placeholder="e.g. Rahul & Priya Wedding" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Event Date</label>
+                    <input type="date" name="date" class="form-control"
+                           value="{{ event.date }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Venue</label>
+                    <input type="text" name="venue" class="form-control"
+                           value="{{ event.venue }}" placeholder="e.g. Hotel Grand, Bhubaneswar">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Total Budget (₹)</label>
+                    <input type="number" name="total_budget" class="form-control"
+                           value="{{ event.total_budget }}" placeholder="e.g. 500000" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    {% if event %}Update Event{% else %}Create Event{% endif %}
+                </button>
+                <a href="{% url 'event_list' %}" class="btn btn-outline-secondary w-100 mt-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

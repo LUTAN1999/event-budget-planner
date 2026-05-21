@@ -1,0 +1,42 @@
+{% extends 'planner/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>My Events</h2>
+    <a href="{% url 'event_create' %}" class="btn btn-primary">+ New Event</a>
+</div>
+
+{% if events %}
+    <div class="row">
+        {% for event in events %}
+        <div class="col-md-4 mb-4">
+            <div class="card p-3">
+                <h5 class="fw-bold">{{ event.name }}</h5>
+                <p class="text-muted mb-1">📅 {{ event.date }}</p>
+                <p class="text-muted mb-1">📍 {{ event.venue }}</p>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <span class="text-success fw-semibold">Budget: ₹{{ event.total_budget }}</span>
+                    <span class="text-danger fw-semibold">Spent: ₹{{ event.total_spent }}</span>
+                </div>
+                <div class="progress my-2" style="height: 8px;">
+                    {% if event.total_budget > 0 %}
+                        <div class="progress-bar bg-purple" role="progressbar"
+                             style="width: {% widthratio event.total_spent event.total_budget 100 %}%; background-color: #6f42c1;">
+                        </div>
+                    {% endif %}
+                </div>
+                <p class="text-muted small">Remaining: ₹{{ event.remaining_budget }}</p>
+                <a href="{% url 'event_detail' event.pk %}" class="btn btn-primary btn-sm w-100 mt-2">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center mt-5">
+        <h4 class="text-muted">No events yet!</h4>
+        <p class="text-muted">Click "New Event" to get started.</p>
+        <a href="{% url 'event_create' %}" class="btn btn-primary">+ Create First Event</a>
+    </div>
+{% endif %}
+{% endblock %}

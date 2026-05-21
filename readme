@@ -1,0 +1,51 @@
+# 💍 Marriage / Event Budget Planner
+
+A full-stack web application built with **Python**, **Django**, and **SQLite** to help plan and track wedding and event budgets.
+
+## Features
+- 🔐 User registration and login
+- 🎊 Create and manage multiple events
+- 📋 Budget categories (Catering, Decoration, etc.)
+- 💸 Expense tracking with paid/pending status
+- 🔔 Over-budget alerts
+- 👥 Vendor management
+- 📤 Export reports as CSV and PDF
+
+## Tech Stack
+- Python 3.13
+- Django 5.1
+- SQLite (Database)
+- Bootstrap 5 (Frontend)
+- ReportLab (PDF Export)
+
+## Setup Instructions
+
+1. Clone the repository
+   git clone https://github.com/YOUR_USERNAME/event-budget-planner.git
+   cd event-budget-planner
+
+2. Create virtual environment
+   python -m venv venv
+   venv\Scripts\activate
+
+3. Install dependencies
+   pip install -r requirements.txt
+
+4. Run migrations
+   python manage.py migrate
+
+5. Create superuser
+   python manage.py createsuperuser
+
+6. Run the server
+   python manage.py runserver
+
+7. Open in browser
+   http://127.0.0.1:8000/
+
+## Screenshots
+(Add screenshots here after deployment)
+
+## Author
+Satyajit — BSc Chemistry | Python & Django Developer
+GitHub: https://github.com/LUTAN1999git

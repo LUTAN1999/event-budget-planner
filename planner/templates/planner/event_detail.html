@@ -1,0 +1,152 @@
+{% extends 'planner/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>{{ event.name }}</h2>
+    <div>
+        <a href="{% url 'event_edit' event.pk %}" class="btn btn-warning btn-sm">Edit</a>
+        <a href="{% url 'event_delete' event.pk %}" class="btn btn-danger btn-sm">Delete</a>
+        <a href="{% url 'export_csv' event.pk %}" class="btn btn-success btn-sm">Export CSV</a>
+        <a href="{% url 'export_pdf' event.pk %}" class="btn btn-secondary btn-sm">Export PDF</a>
+    </div>
+</div>
+
+<!-- Event Summary -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <p class="text-muted mb-1">Total Budget</p>
+            <h4 class="text-primary">₹{{ event.total_budget }}</h4>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <p class="text-muted mb-1">Total Spent</p>
+            <h4 class="text-danger">₹{{ event.total_spent }}</h4>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <p class="text-muted mb-1">Remaining</p>
+            <h4 class="{% if event.remaining_budget >= 0 %}text-success{% else %}text-danger{% endif %}">
+                ₹{{ event.remaining_budget }}
+            </h4>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <p class="text-muted mb-1">Event Date</p>
+            <h4>{{ event.date }}</h4>
+        </div>
+    </div>
+</div>
+
+<!-- Categories -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Budget Categories</h4>
+    <a href="{% url 'category_add' event.pk %}" class="btn btn-primary btn-sm">+ Add Category</a>
+</div>
+
+{% for category in categories %}
+<div class="card mb-3 p-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">{{ category.name }}
+            {% if category.is_over_budget %}
+                <span class="badge bg-danger ms-2">Over Budget!</span>
+            {% endif %}
+        </h5>
+        <div>
+            <span class="text-muted small">Allocated: ₹{{ category.allocated_budget }}</span>
+            <span class="text-danger small ms-3">Spent: ₹{{ category.total_spent }}</span>
+            <span class="text-success small ms-3">Remaining: ₹{{ category.remaining }}</span>
+            <a href="{% url 'expense_add' category.pk %}" class="btn btn-sm btn-outline-primary ms-3">+ Expense</a>
+            <a href="{% url 'category_delete' category.pk %}" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+        </div>
+    </div>
+
+    {% if category.expenses.all %}
+    <table class="table table-sm mt-3 mb-0">
+        <thead class="table-light">
+            <tr>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Note</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in category.expenses.all %}
+            <tr>
+                <td>{{ expense.title }}</td>
+                <td>₹{{ expense.amount }}</td>
+                <td>{{ expense.date }}</td>
+                <td>
+                    {% if expense.status == 'paid' %}
+                        <span class="badge bg-success">Paid</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </td>
+                <td>{{ expense.note }}</td>
+                <td>
+                    <a href="{% url 'expense_edit' expense.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'expense_delete' expense.pk %}" class="btn btn-sm btn-danger">Del</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="text-muted small mt-2 mb-0">No expenses added yet.</p>
+    {% endif %}
+</div>
+{% empty %}
+    <p class="text-muted">No categories yet. Add one to start tracking!</p>
+{% endfor %}
+
+<!-- Vendors -->
+<div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+    <h4>Vendors</h4>
+    <a href="{% url 'vendor_add' event.pk %}" class="btn btn-primary btn-sm">+ Add Vendor</a>
+</div>
+
+{% if vendors %}
+<table class="table table-bordered bg-white">
+    <thead class="table-light">
+        <tr>
+            <th>Name</th>
+            <th>Service</th>
+            <th>Amount</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vendor in vendors %}
+        <tr>
+            <td>{{ vendor.name }}</td>
+            <td>{{ vendor.service }}</td>
+            <td>₹{{ vendor.amount }}</td>
+            <td>{{ vendor.contact }}</td>
+            <td>
+                {% if vendor.paid %}
+                    <span class="badge bg-success">Paid</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'vendor_delete' vendor.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p class="text-muted">No vendors added yet.</p>
+{% endif %}
+
+{% endblock %}
